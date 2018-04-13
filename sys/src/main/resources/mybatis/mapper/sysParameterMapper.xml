@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    Welcome to use the TableGo Tools.
+    
+    http://vipbooks.iteye.com
+    http://blog.csdn.net/vipbooks
+    http://www.cnblogs.com/vipbooks
+    
+    Author:bianj
+    Email:edinsker@163.com
+    Version:5.0.0
+-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- SYS_PARAMETER -->
+<mapper namespace="com.jiang.sys.dao.SysParameterDao">
+    <!-- 结果映射 -->
+    <resultMap id="sysParameterMap" type="com.jiang.sys.domain.SysParameter"></resultMap>
+    
+    <!-- 表所有字段 -->
+    <sql id="allColumns">
+        ID, CREATE_TIME, CREATER, MODIFY_TIME, MODIFIER, 
+        PARAMETER_CODE, PARAMETER_VALUE, PARAMETER_NAME, PARAMETER_DESCRIPTION, MODULE_CODE, 
+        PARAMETER_TYPE
+    </sql>
+    
+    <!-- 插入数据 -->
+    <insert id="insertSysParameter" parameterType="com.jiang.sys.domain.SysParameter">
+        INSERT INTO SYS_PARAMETER (<include refid="allColumns" />)
+        VALUES (
+            #{id},
+            #{createTime},
+            #{creater},
+            #{modifyTime},
+            #{modifier},
+            #{parameterCode},
+            #{parameterValue},
+            #{parameterName},
+            #{parameterDescription},
+            #{moduleCode},
+            #{parameterType}
+        )
+    </insert>
+    
+</mapper>

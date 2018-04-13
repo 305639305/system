@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- SYS_DESKTOP -->
+<mapper namespace="com.jiang.sys.dao.SysDesktopDao">
+    <!-- 结果映射 -->
+    <resultMap id="sysDesktopMap" type="com.jiang.sys.domain.SysDesktop"></resultMap>
+    
+    <!-- 表所有字段 -->
+    <sql id="allColumns">
+        USER_NAME, MODULE_CODE
+    </sql>
+    
+    <!-- 插入数据 -->
+    <insert id="insertSysDesktop" parameterType="com.jiang.sys.domain.SysDesktop">
+        INSERT INTO SYS_DESKTOP (<include refid="allColumns" />)
+        VALUES (
+            #{userName},
+            #{moduleCode}
+        )
+    </insert>
+    
+</mapper>

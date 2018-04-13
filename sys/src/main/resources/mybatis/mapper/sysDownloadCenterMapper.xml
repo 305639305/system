@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    Welcome to use the TableGo Tools.
+    
+    http://vipbooks.iteye.com
+    http://blog.csdn.net/vipbooks
+    http://www.cnblogs.com/vipbooks
+    
+    Author:bianj
+    Email:edinsker@163.com
+    Version:5.0.0
+-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- SYS_DOWNLOAD_CENTER -->
+<mapper namespace="com.jiang.sys.dao.SysDownloadCenterDao">
+    <!-- 结果映射 -->
+    <resultMap id="sysDownloadCenterMap" type="com.jiang.sys.domain.SysDownloadCenter"></resultMap>
+    
+    <!-- 表所有字段 -->
+    <sql id="allColumns">
+        ID, CREATE_TIME, CREATER, MODIFY_TIME, MODIFIER, 
+        FILE_NAME, FILE_PATH, FILE_EXTENSION, FILE_TYPE
+    </sql>
+    
+    <!-- 插入数据 -->
+    <insert id="insertSysDownloadCenter" parameterType="com.jiang.sys.domain.SysDownloadCenter">
+        <selectKey keyProperty="id" resultType="long" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO SYS_DOWNLOAD_CENTER (<include refid="allColumns" />)
+        VALUES (
+            #{id},
+            #{createTime},
+            #{creater},
+            #{modifyTime},
+            #{modifier},
+            #{fileName},
+            #{filePath},
+            #{fileExtension},
+            #{fileType}
+        )
+    </insert>
+    
+</mapper>

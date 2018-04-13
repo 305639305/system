@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<style type="text/css">
+    /*在使用bootstrap和easyui的时候，发现很多有冲突的地方，包括datagrid控件和combo等，以下进行的问题修正，保证easyui正常显示
+        bootstrap兼容问题和easyui的bug
+    */
+    .panel-header, .panel-body {
+        border-width: 0px;
+    }
+    
+    .datagrid, .combo-p {
+        border: solid 1px #D4D4D4;
+    }
+    
+    .datagrid * {
+        -webkit-box-sizing: content-box;
+        -moz-box-sizing: content-box;
+        box-sizing: content-box;
+    }
+    
+    /*我的添加：添加下面这个更好，所有的easyui所有的布局都在layout下面
+    基本原理就是还原easyui中的默认设置，让bootstrap的作用域不在easyui控件定义的css范围内。
+    */
+    
+    .easyui-layout * {
+        -webkit-box-sizing: content-box;
+        -moz-box-sizing: content-box;
+        box-sizing: content-box;
+    }
+    /*超出内容用省略号代替
+        */
+    .datagrid-header-rownumber,.datagrid-cell-rownumber{
+        width:50px;
+    }
+</style>
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+    <div class="col-sm-12">
+        <div class="ibox">
+            <div class="ibox-body">
+                <div class="fixed-table-toolbar">
+                    <div class="columns pull-left">
+                        <button shiro:hasPermission="system:sysDept:add" type="button" class="btn  btn-primary"
+                                onclick="toAddSysDept(0)">
+                            <i class="fa fa-plus" aria-hidden="true"></i>添加
+                        </button>
+                        <button shiro:hasPermission="system:sysDept:batchRemove" type="button" class="btn  btn-danger"
+                                onclick="batchRemove()">
+                            <i class="fa fa-trash" aria-hidden="true"></i>删除
+                        </button>
+                    </div>
+                    <div class="columns pull-right">
+                        <button class="btn btn-success" onclick="reLoad()">查询</button>
+                    </div>
+                    
+                    <div class="columns pull-right col-md-2 nopadding">
+                        <input id="searchName" type="text" class="form-control"
+                               placeholder="请输入部门名称"/>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+        
+    </div>
+    <div class="col-sm-12">
+        <table id="treegrid" style="margin-top: 10em">
+        </table>
+    </div>
+
+
+</div>
+</div>
+<div th:include="include :: footer"></div>
+
+
+<link rel="stylesheet" type="text/css" href="/jquery-easyui-1.5.4.5/themes/bootstrap/easyui.css">
+<link rel="stylesheet" type="text/css" href="/jquery-easyui-1.5.4.5/themes/icon.css">
+<script type="text/javascript" src="/jquery-easyui-1.5.4.5/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/jquery-easyui-1.5.4.5/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //初始化部门treegird
+        $('#treegrid').treegrid({
+            url: '/sys/sysDept/find', // 请求数据的ajax的url
+            idField: 'departmentCode',
+            treeField: 'departmentCode',
+            //height:500,
+            fit:false,
+            checkbox: true,
+            lines: true,
+            rownumbers: true,
+            striped: true,
+            fitColumns: true,
+            //toolbar : '#tools',
+            cascadeCheck: false,
+            scrollbarSize:14,
+           // pagination:true,
+           // pageSize : 300,
+           // pageNumber : 1,
+           // pageList : [ 10, 15, 20, 25, 30, 50, 100, 150,200,250,300 ],
+            loadMsg : '数据正在加载,请耐心的等待...',
+            checkOnSelect : false,
+            columns: [[{
+                title: '部门代码',
+                field: 'departmentCode',
+                width: 300
+            }, {
+                title: '上级部门代码',
+                field: 'parentDepartmentCode',
+                width: 300
+            }, {
+                title: '部门名称',
+                field: 'departmentName',
+                width: 300
+            }, {
+                title: '部门简称',
+                field: 'departmentAbbreviation',
+                width: 100
+            }, {
+                title: '部门联系人',
+                field: 'departmentContactPerson',
+                width: 100
+            }, {
+                title: '联系地址',
+                field: 'departmentContactAddress',
+                width: 100
+            }, {
+                title: '排序',
+                field: 'departmentOrder',
+                width: 100,
+                align: "center"
+            }, {
+                title: '操作',
+                field : 'begin',
+                width: 300,
+                align: "center",
+                formatter: rowOption
+            }]],
+            onLoadSuccess: function (data) {
+
+                var thisObj=$(this);
+                function bindRowsEvent() {
+                    var panel = $(thisObj).datagrid('getPanel');
+                    var rows = panel.find('tr[datagrid-row-index]');
+                    rows.unbind('click').bind('click', function(e) {
+                        return false;
+                    });
+                    rows.find('div.datagrid-cell-check input[type="checkbox"]').unbind().bind('click', function(e) {
+                        var index = $(this).parent().parent().parent().attr('datagrid-row-index');
+                        if ($(this).prop('checked')) {
+                            $(thisObj).datagrid('selectRow', index);
+                        } else {
+                            $(thisObj).datagrid('unselectRow', index);
+                        }
+                        e.stopPropagation();
+                    });
+                }
+                setTimeout(function() {
+                    bindRowsEvent();
+                }, 10);
+            }
+        });
+    });
+    function rowOption(value, row, rowIndex) {
+
+         var str='<button type="button" class="btn btn-primary btn-sm" style="margin-left: 2px;" onclick="toAddSysDept(\'' + row.departmentCode+ '\','+'\''+row.departmentName+'\')"> ' +
+             '<i class="fa fa-plus"></i>添加下级 </button>';
+         str+='<button type="button" class="btn btn-danger btn-sm" style="margin-left: 2px;"  onclick="toAddSysDept(\'' + row.departmentCode+ '\','+'\''+row.departmentName+'\')"> ' +
+            '<i class="fa fa-trash" ></i>删除 </button>';
+        return str;
+    }
+
+    function toAddSysDept(parentCode,parentName) {
+        if(!parentName){
+            parentName='';
+        }
+        layer.open({
+            type : 2,
+            title : '新增部门',
+            maxmin : true,
+            shadeClose : false, // 点击遮罩关闭层
+            area : [ '800px', '520px' ],
+            content : '/sys/sysDept/toAddSysDept?parentCode=' + parentCode+'&parentName='+parentName
+        });
+    }
+    function reLoad() {
+        load();
+    }
+    function appendRow(parent,data) {
+        var array = [];
+        array.push(data);
+        $('#treegrid').treegrid('append',{
+            parent: parent,  // the node has a 'id' value that defined through 'idField' property
+            data:array
+        });
+        clear();
+    }
+    function clear() {
+        $('#treegrid').treegrid('clearSelections');
+        $('#treegrid').treegrid('clearChecked');
+        $('#treegrid').treegrid('unselectAll');
+    }
+</script>
+<!--<script type="text/javascript" src="/js/appjs/system/sysDept/sysDept.js"></script>-->
+</body>
+</html>

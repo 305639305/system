@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- SYS_USER -->
+<mapper namespace="com.jiang.sys.dao.SysUserDao">
+    <!-- 结果映射 -->
+    <resultMap id="sysUserMap" type="com.jiang.sys.domain.SysUser">
+        <id column="ID" property="id" jdbcType="INTEGER" />
+        <result column="CREATER" property="creater" jdbcType="VARCHAR" />
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="MODIFIER" property="modifier" jdbcType="VARCHAR" />
+        <result column="MODIFY_TIME" property="modifyTime" jdbcType="TIME" />
+        <result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+        <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+        <result column="REAL_NAME" property="realName" jdbcType="VARCHAR" />
+        <result column="AGE" property="age" jdbcType="INTEGER" />
+        <result column="DEPARTMENT_CODE" property="departmentCode" jdbcType="VARCHAR" />
+        <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+        <result column="GENDER" property="gender" jdbcType="VARCHAR" />
+        <result column="PHONE_NUMBER" property="phoneNumber" jdbcType="VARCHAR" />
+        <result column="BIRTHDATE" property="birthdate" jdbcType="DATE" />
+        <result column="IDENTIFICATION_CARD" property="identificationCard" jdbcType="VARCHAR" />
+        <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+        <result column="BINDED" property="binded" jdbcType="VARCHAR" />
+        <result column="CUSTOMER_TYPE" property="customerType" jdbcType="VARCHAR" />
+        <result column="MAC_ADDRESSES" property="macAddresses" jdbcType="VARCHAR" />
+        <result column="LIMITED" property="limited" jdbcType="VARCHAR" />
+        <result column="START_IP" property="startIp" jdbcType="VARCHAR" />
+        <result column="END_IP" property="endIp" jdbcType="VARCHAR" />
+        <result column="AUTHORIZED" property="authorized" jdbcType="VARCHAR" />
+        <result column="AUTHORIZED_TYPE" property="authorizedType" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <!-- 表所有字段 -->
+    <sql id="allColumns">
+        ID, CREATER, CREATE_TIME, MODIFIER, MODIFY_TIME,
+        USER_NAME, PASSWORD, REAL_NAME, AGE, DEPARTMENT_CODE,
+        EMAIL, GENDER, PHONE_NUMBER, BIRTHDATE, IDENTIFICATION_CARD,
+        ADDRESS, BINDED, CUSTOMER_TYPE, MAC_ADDRESSES, LIMITED,
+        START_IP, END_IP, AUTHORIZED, AUTHORIZED_TYPE
+    </sql>
+
+
+    <!-- 注意这里需要先查询自增主键值 -->
+    <insert id="insertSysUser" parameterType="com.jiang.sys.domain.SysUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        <selectKey keyProperty="id" resultType="long" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO SYS_USER (<include refid="allColumns" />)
+        VALUES (
+        #{id},
+        #{creater},
+        #{createTime},
+        #{modifier},
+        #{modifyTime},
+        #{userName},
+        #{password},
+        #{realName},
+        #{age},
+        #{departmentCode},
+        #{email},
+        #{gender},
+        #{phoneNumber},
+        #{birthdate},
+        #{identificationCard},
+        #{address},
+        #{binded},
+        #{customerType},
+        #{macAddresses},
+        #{limited},
+        #{startIp},
+        #{endIp},
+        #{authorized},
+        #{authorizedType}
+        )
+    </insert>
+
+    <!-- 修改数据 -->
+    <update id="updateSysUser" parameterType="com.jiang.sys.domain.SysUser">
+        UPDATE SYS_USER SET
+        CREATER = #{creater},
+        CREATE_TIME = #{createTime},
+        MODIFIER = #{modifier},
+        MODIFY_TIME = #{modifyTime},
+        USER_NAME = #{userName},
+        PASSWORD = #{password},
+        REAL_NAME = #{realName},
+        AGE = #{age},
+        DEPARTMENT_CODE = #{departmentCode},
+        EMAIL = #{email},
+        GENDER = #{gender},
+        PHONE_NUMBER = #{phoneNumber},
+        BIRTHDATE = #{birthdate},
+        IDENTIFICATION_CARD = #{identificationCard},
+        ADDRESS = #{address},
+        BINDED = #{binded},
+        CUSTOMER_TYPE = #{customerType},
+        MAC_ADDRESSES = #{macAddresses},
+        LIMITED = #{limited},
+        START_IP = #{startIp},
+        END_IP = #{endIp},
+        AUTHORIZED = #{authorized},
+        AUTHORIZED_TYPE = #{authorizedType}
+        WHERE ID = #{id}
+    </update>
+
+</mapper>

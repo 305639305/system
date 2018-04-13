@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    Welcome to use the TableGo Tools.
+    
+    http://vipbooks.iteye.com
+    http://blog.csdn.net/vipbooks
+    http://www.cnblogs.com/vipbooks
+    
+    Author:bianj
+    Email:edinsker@163.com
+    Version:5.0.0
+-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- SYS_DICTIONARY_CATEGORY -->
+<mapper namespace="com.jiang.sys.dao.SysDictionaryCategoryDao">
+    <!-- 结果映射 -->
+    <resultMap id="sysDictionaryCategoryMap" type="com.jiang.sys.domain.SysDictionaryCategory"></resultMap>
+    
+    <!-- 表所有字段 -->
+    <sql id="allColumns">
+        ID, CREATE_TIME, CREATER, MODIFY_TIME, MODIFIER, 
+        DICTIONARY_CATEGORY_CODE, DICTIONARY_CATEGORY_NAME, SUPERIOR_DICTIONARY_CATEGORY_CODE, DICTIONARY_CATEGORY_ATTRIBUTE, DICTIONARY_CATEGORY_DESCRIPTION, 
+        TREE_PATH
+    </sql>
+    
+    <!-- 插入数据 -->
+    <insert id="insertSysDictionaryCategory" parameterType="com.jiang.sys.domain.SysDictionaryCategory">
+        <selectKey keyProperty="id" resultType="long" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO SYS_DICTIONARY_CATEGORY (<include refid="allColumns" />)
+        VALUES (
+            #{id},
+            #{createTime},
+            #{creater},
+            #{modifyTime},
+            #{modifier},
+            #{dictionaryCategoryCode},
+            #{dictionaryCategoryName},
+            #{superiorDictionaryCategoryCode},
+            #{dictionaryCategoryAttribute},
+            #{dictionaryCategoryDescription},
+            #{treePath}
+        )
+    </insert>
+    
+</mapper>

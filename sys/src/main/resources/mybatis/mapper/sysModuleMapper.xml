@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    Welcome to use the TableGo Tools.
+    
+    http://vipbooks.iteye.com
+    http://blog.csdn.net/vipbooks
+    http://www.cnblogs.com/vipbooks
+    
+    Author:bianj
+    Email:edinsker@163.com
+    Version:5.0.0
+-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- SYS_MODULE -->
+<mapper namespace="com.jiang.sys.dao.SysModuleDao">
+    <!-- 结果映射 -->
+    <resultMap id="sysModuleMap" type="com.jiang.sys.domain.SysModule">
+        <id column="ID" property="id" jdbcType="INTEGER" />
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="CREATER" property="creater" jdbcType="VARCHAR" />
+        <result column="MODIFY_TIME" property="modifyTime" jdbcType="TIMESTAMP" />
+        <result column="MODIFIER" property="modifier" jdbcType="VARCHAR" />
+        <result column="MODULE_CODE" property="moduleCode" jdbcType="VARCHAR" />
+        <result column="SUPERIOR_MODULE_CODE" property="superiorModuleCode" jdbcType="VARCHAR" />
+        <result column="MODULE_NAME" property="moduleName" jdbcType="VARCHAR" />
+        <result column="MODULE_PATH" property="modulePath" jdbcType="VARCHAR" />
+        <result column="MODULE_LEVEL" property="moduleLevel" jdbcType="VARCHAR" />
+        <result column="MODULE_ORDER" property="moduleOrder" jdbcType="VARCHAR" />
+        <result column="MODULE_TYPE" property="moduleType" jdbcType="VARCHAR" />
+        <result column="MODULE_DESCRIPTION" property="moduleDescription" jdbcType="VARCHAR" />
+        <result column="MODULE_ICON_PATH" property="moduleIconPath" jdbcType="VARCHAR" />
+        <result column="MODULE_OPEN_MODE" property="moduleOpenMode" jdbcType="VARCHAR" />
+        <result column="PERMISSION" property="permission" jdbcType="VARCHAR" />
+        <result column="TREE_PATH" property="treePath" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <!-- 表所有字段 -->
+    <sql id="allColumns">
+        ID, CREATE_TIME, CREATER, MODIFY_TIME, MODIFIER, 
+        MODULE_CODE, SUPERIOR_MODULE_CODE, MODULE_NAME, MODULE_PATH, MODULE_LEVEL, 
+        MODULE_ORDER, MODULE_TYPE, MODULE_DESCRIPTION, MODULE_ICON_PATH, MODULE_OPEN_MODE, 
+        PERMISSION, TREE_PATH
+    </sql>
+    
+    <!-- 插入数据 -->
+    <insert id="insertSysModule" parameterType="com.jiang.sys.domain.SysModule">
+        INSERT INTO SYS_MODULE (<include refid="allColumns" />)
+        VALUES (
+            #{id},
+            #{createTime},
+            #{creater},
+            #{modifyTime},
+            #{modifier},
+            #{moduleCode},
+            #{superiorModuleCode},
+            #{moduleName},
+            #{modulePath},
+            #{moduleLevel},
+            #{moduleOrder},
+            #{moduleType},
+            #{moduleDescription},
+            #{moduleIconPath},
+            #{moduleOpenMode},
+            #{permission},
+            #{treePath}
+        )
+    </insert>
+
+    <!-- 修改数据 -->
+    <update id="updateSysModule"  parameterType="com.jiang.sys.domain.SysModule">
+        UPDATE SYS_MODULE SET
+        CREATE_TIME = #{createTime},
+        CREATER = #{creater},
+        MODIFY_TIME = #{modifyTime},
+        MODIFIER = #{modifier},
+        MODULE_CODE = #{moduleCode},
+        SUPERIOR_MODULE_CODE = #{superiorModuleCode},
+        MODULE_NAME = #{moduleName},
+        MODULE_PATH = #{modulePath},
+        MODULE_LEVEL = #{moduleLevel},
+        MODULE_ORDER = #{moduleOrder},
+        MODULE_TYPE = #{moduleType},
+        MODULE_DESCRIPTION = #{moduleDescription},
+        MODULE_ICON_PATH = #{moduleIconPath},
+        MODULE_OPEN_MODE = #{moduleOpenMode},
+        PERMISSION = #{permission},
+        TREE_PATH = #{treePath}
+        WHERE ID = #{id}
+    </update>
+    
+</mapper>

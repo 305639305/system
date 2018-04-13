@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- SYS_LOG -->
+<mapper namespace="com.jiang.sys.dao.SysLogDao">
+    <!-- 结果映射 -->
+    <resultMap id="sysLogMap" type="com.jiang.sys.domain.SysLog">
+        <id column="LOG_ID" property="logId" jdbcType="INTEGER" />
+        <result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+        <result column="LOG_TYPE" property="logType" jdbcType="VARCHAR" />
+        <result column="LOG_DESCRIPTION" property="logDescription" jdbcType="VARCHAR" />
+        <result column="LOG_LEVEL" property="logLevel" jdbcType="VARCHAR" />
+        <result column="REQUEST_ADDR" property="requestAddr" jdbcType="VARCHAR" />
+        <result column="REQUEST_URI" property="requestUri" jdbcType="VARCHAR" />
+        <result column="REQUEST_METHOD" property="requestMethod" jdbcType="VARCHAR" />
+        <result column="REQUEST_PARAMS" property="requestParams" jdbcType="VARCHAR" />
+        <result column="EXCEPTION_INFORMATION" property="exceptionInformation" jdbcType="VARCHAR" />
+        <result column="START_TIME" property="startTime" jdbcType="TIMESTAMP" />
+        <result column="END_TIME" property="endTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <!-- 表所有字段 -->
+    <sql id="allColumns">
+        LOG_ID, USER_NAME, LOG_TYPE, LOG_DESCRIPTION, LOG_LEVEL,
+        REQUEST_ADDR, REQUEST_URI, REQUEST_METHOD, REQUEST_PARAMS, EXCEPTION_INFORMATION,
+        START_TIME, END_TIME
+    </sql>
+    
+
+    <insert id="insertSysLog" parameterType="com.jiang.sys.domain.SysLog">
+        <selectKey keyProperty="logId" resultType="long" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO SYS_LOG (<include refid="allColumns" />)
+        VALUES (
+        #{logId},
+        #{userName},
+        #{logType},
+        #{logDescription},
+        #{logLevel},
+        #{requestAddr},
+        #{requestUri},
+        #{requestMethod},
+        #{requestParams},
+        #{exceptionInformation},
+        #{startTime},
+        #{endTime}
+        )
+    </insert>
+
+
+
+    <update id="updateSysLog"  parameterType="com.jiang.sys.domain.SysLog">
+       <!-- UPDATE SYS_LOG
+        <trim prefix="set" suffixOverrides=",">
+            <if test="USER_IDENTITY!=null and USER_IDENTITY != ''">USER_IDENTITY=#{userIdentity},</if>
+            <if test="LOG_TYPE!=null and LOG_TYPE != ''">LOG_TYPE=#{logType},</if>
+            <if test="LOG_DESCRIPTION!=null and LOG_DESCRIPTION != ''">LOG_DESCRIPTION=#{logDescription},</if>
+            <if test="LOG_LEVEL!=null and LOG_LEVEL != ''">LOG_LEVEL=#{logLevel},</if>
+            <if test="REQUEST_ADDR!=null and REQUEST_ADDR != ''">REQUEST_ADDR=#{requestAddr},</if>
+            <if test="REQUEST_URI!=null and REQUEST_URI != ''">REQUEST_URI=#{requestUri},</if>
+            <if test="REQUEST_METHOD!=null and REQUEST_METHOD != ''">REQUEST_METHOD=#{requestMethod},</if>
+            <if test="REQUEST_PARAMS!=null and REQUEST_PARAMS != ''">REQUEST_PARAMS=#{requestParams},</if>
+            <if test="EXCEPTION_INFORMATION!=null and EXCEPTION_INFORMATION != ''">EXCEPTION_INFORMATION=#{exceptionInformation},</if>
+            <if test="START_TIME!=null">START_TIME=#{startTime},</if>
+            <if test="END_TIME!=null">END_TIME=#{endTime},</if>
+        </trim>
+        WHERE LOG_ID=#{logId}-->
+        UPDATE SYS_LOG SET
+        USER_NAME = #{userName},
+        LOG_TYPE = #{logType},
+        LOG_DESCRIPTION = #{logDescription},
+        LOG_LEVEL = #{logLevel},
+        REQUEST_ADDR = #{requestAddr},
+        REQUEST_URI = #{requestUri},
+        REQUEST_METHOD = #{requestMethod},
+        REQUEST_PARAMS = #{requestParams},
+        EXCEPTION_INFORMATION = #{exceptionInformation},
+        START_TIME = #{startTime},
+        END_TIME = #{endTime}
+        WHERE LOG_ID = #{logId}
+    </update>
+
+</mapper>
